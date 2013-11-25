@@ -1,0 +1,1 @@
+curl -u colinb:badger -d "materials[supporter]=51d3cbdefc33a519d17534b97e2ad5a18778bd9b" http://ec2-204-236-196-143.compute-1.amazonaws.com:8153/go/api/pipelines/Supporter/schedule
