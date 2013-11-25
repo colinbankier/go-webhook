@@ -10,7 +10,8 @@ post '/notify' do
 
   uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter/schedule")
   req = Net::HTTP::Post.new(uri.path)
-  req.body = "materials[supporter]=12345"
+  req.body = "materials[#{data['project_name']}]=#{data['commit']['id']}"
+  req.basic_auth ENV['GO_USER'], ENV['GO_PWD']
   res = Net::HTTP.start(uri.hostname, uri.port) do |http|
       http.request(req)
   end

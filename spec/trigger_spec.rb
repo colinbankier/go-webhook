@@ -15,10 +15,11 @@ describe 'The GO Webhook App' do
 
   it 'schedules go pipeline' do
     puts "Go Host: #{ENV['GO_HOST']}"
-    stub_request(:any, /.*/)
+    stub_request(:any, /user:password@.*/)
     post '/notify', {branch_name: "master", project_name: "supporter", commit: { id: "12345" }}.to_json
 
-    expected_url = "#{ENV['GO_HOST']}/go/api/pipelines/Supporter/schedule"
+    host = ENV['GO_HOST'].sub 'http://', ''
+    expected_url = "#{ENV['GO_USER']}:#{ENV['GO_PWD']}@#{host}/go/api/pipelines/Supporter/schedule"
     expected_body = "materials[supporter]=12345"
 
     puts last_response
