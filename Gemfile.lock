@@ -1,8 +1,12 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.3.5)
+    crack (0.4.1)
+      safe_yaml (~> 0.9.0)
     daemons (1.1.9)
     diff-lcs (1.2.4)
+    dotenv (0.9.0)
     eventmachine (1.0.3)
     rack (1.5.2)
     rack-protection (1.5.1)
@@ -17,6 +21,7 @@ GEM
     rspec-expectations (2.14.3)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.4)
+    safe_yaml (0.9.7)
     sinatra (1.4.4)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -26,12 +31,17 @@ GEM
       eventmachine (>= 1.0.0)
       rack (>= 1.0.0)
     tilt (1.4.1)
+    webmock (1.16.0)
+      addressable (>= 2.2.7)
+      crack (>= 0.3.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   rack-test
   rspec
   sinatra
   thin
+  webmock
