@@ -1,6 +1,7 @@
 require "sinatra"
 require 'json'
 require 'net/http'
+require 'dotenv'
 
 Dotenv.load
 
@@ -13,12 +14,16 @@ post '/notify' do
   req.body = "materials[#{data['project_name']}]=#{data['commit']['id']}"
   req.basic_auth ENV['GO_USER'], ENV['GO_PWD']
   res = Net::HTTP.start(uri.hostname, uri.port) do |http|
-      http.request(req)
+    puts uri.to_s
+    puts req.body
+    http.request(req)
   end
 
+  puts res.value
+  puts res.body
   case res
   when Net::HTTPSuccess, Net::HTTPRedirection
-    "OK"
+    res.body
   else
     res.value
   end
