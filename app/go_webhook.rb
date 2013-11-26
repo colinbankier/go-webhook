@@ -6,11 +6,13 @@ require 'dotenv'
 Dotenv.load
 
 post '/notify' do
+  logger.info "Got request with data: #{data}"
   if data['branch_name'] == 'master'
     uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter/schedule")
     req = build_request uri
     do_request uri, req
   else
+    logger.info "Skipping non master branch"
     "Not master branch"
   end
 end
@@ -28,6 +30,7 @@ def data
 end
 
 def do_request uri, req
+  logger.info "Triggering #{uri} with #{req.body}"
     res = Net::HTTP.start(uri.hostname, uri.port) do |http|
       puts uri.to_s
       puts req.body
@@ -42,8 +45,11 @@ def handle_response res
     puts res.body
     case res
     when Net::HTTPSuccess, Net::HTTPRedirection
+      logger.info "Trigger Ok: #{res.body}"
       res.body
     else
+      logger.info "Trigger error: #{res.value}"
+      logger.info "Trigger error: #{res.body}"
       res.value
     end
 end
