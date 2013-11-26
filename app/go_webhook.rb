@@ -7,12 +7,12 @@ Dotenv.load
 
 post '/notify' do
   logger.info "Got request with data: #{data}"
-  if data['branch_name'] == 'master'
-    uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter/schedule")
+  if data['branch_name'] == 'master' && data["result"] == "passed"
+    uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter_Staging_3/schedule")
     req = build_request uri
     do_request uri, req
   else
-    logger.info "Skipping non master branch"
+    logger.info "Skipping non master branch or failed build"
     "Not master branch"
   end
 end
