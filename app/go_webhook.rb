@@ -8,7 +8,7 @@ Dotenv.load
 post '/notify' do
   logger.info "Got request with data: #{data}"
   if data['branch_name'] == 'master' && data["result"] == "passed"
-    uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter_Staging_3/schedule")
+    uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/Supporter_Staging_1/schedule")
     req = build_request uri
     do_request uri, req
   else
