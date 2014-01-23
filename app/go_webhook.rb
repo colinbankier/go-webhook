@@ -8,9 +8,9 @@ Dotenv.load
 post '/notify' do
   logger.info "Got request with data: #{data}"
   if successful_master(data) && data['project_name'] == 'supporter'
-    trigger_pipeline "Supporter_Staging_1"
+    trigger_pipeline "Supporter_Staging_1", "materials[#{data['project_name']}]=#{data['commit']['id']}"
   elsif successful_master(data) && data['project_name'] == 'command_centre'
-    trigger_pipeline "Heroix_Staging_1"
+    trigger_pipeline "Heroix_Staging_1", "variables[COMMIT]=#{data['commit']['id']}"
   else
     logger.info "Skipping non master branch or failed build - #{data['project_name']}"
     "Not master branch"
@@ -21,15 +21,15 @@ def successful_master data
   data['branch_name'] == 'master' && data["result"] == "passed"
 end
 
-def trigger_pipeline name
+def trigger_pipeline name, body
   uri = URI("#{ENV['GO_HOST']}/go/api/pipelines/#{name}/schedule")
-  req = build_request uri
+  req = build_request uri, body
   do_request uri, req
 end
 
-def build_request uri
+def build_request uri, body
     req = Net::HTTP::Post.new(uri.path)
-    req.body = "materials[#{data['project_name']}]=#{data['commit']['id']}"
+    req.body = body
     req.basic_auth ENV['GO_USER'], ENV['GO_PWD']
     req
 end
