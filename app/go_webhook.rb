@@ -11,6 +11,8 @@ post '/notify' do
     trigger_pipeline "Supporter_Staging_1", "materials[#{data['project_name']}]=#{data['commit']['id']}"
   elsif successful_master(data) && data['project_name'] == 'command_centre'
     trigger_pipeline "Heroix_Staging_1", "variables[COMMIT]=#{data['commit']['id']}"
+  elsif successful_master(data) && data['project_name'] == 'payments'
+    trigger_pipeline "cobra_prod", "materials[#{data['project_name']}]=#{data['commit']['id']}"
   else
     logger.info "Skipping non master branch or failed build - #{data['project_name']}"
     "Not master branch"
