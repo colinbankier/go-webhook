@@ -8,7 +8,7 @@ Dotenv.load
 post '/notify' do
   logger.info "Got request with data: #{data}"
   if successful_master(data) && data['project_name'] == 'supporter'
-    trigger_pipeline "Supporter_Staging_1", "materials[#{data['project_name']}]=#{data['commit']['id']}"
+    trigger_pipeline "Supporter_Master_Build", "materials[#{data['project_name']}]=#{data['commit']['id']}"
   elsif successful_master(data) && data['project_name'] == 'command_centre'
     trigger_pipeline "Heroix_Staging_1", "variables[COMMIT]=#{data['commit']['id']}"
   elsif successful_master(data) && data['project_name'] == 'payments'
