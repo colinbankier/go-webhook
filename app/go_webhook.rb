@@ -5,16 +5,23 @@ require 'dotenv'
 
 Dotenv.load
 
+def triggers
+  {
+    supporter: 'Supporter_Master_Build',
+    command_centre: 'Heroix_Master_Build',
+    payments: 'semaphore',
+  }
+end
+
 post '/notify' do
   logger.info "Got request with data: #{data}"
-  if data['branch_name'] == 'master' && data['project_name'] == 'supporter'
-    trigger_pipeline "Supporter_Master_Build", "materials[#{data['project_name']}]=#{data['commit']['id']}&variables[STATUS]=#{data["result"]}"
-  elsif successful_master(data) && data['project_name'] == 'command_centre'
-    trigger_pipeline "Heroix_Staging_1", "variables[COMMIT]=#{data['commit']['id']}"
-  elsif successful_master(data) && data['project_name'] == 'payments'
-    trigger_pipeline "payments_production", "materials[#{data['project_name']}]=#{data['commit']['id']}"
+  pipeline_name = triggers[data['project_name'].to_sym]
+
+  if data['branch_name'] == 'master'
+    logger.info "Triggering pipeline #{pipeline_name}"
+    trigger_pipeline pipeline_name, "materials[#{data['project_name']}]=#{data['commit']['id']}&variables[STATUS]=#{data["result"]}"
   else
-    logger.info "Skipping non master branch or failed build - #{data['project_name']}"
+    logger.info "Skipping non master branch - #{data['project_name']}"
     "Not master branch"
   end
 end
