@@ -10,6 +10,7 @@ def triggers
     supporter: 'Supporter_Master_Build',
     command_centre: 'Heroix_Master_Build',
     payments: 'semaphore',
+    heroix: 'HeroixCi',
   }
 end
 
